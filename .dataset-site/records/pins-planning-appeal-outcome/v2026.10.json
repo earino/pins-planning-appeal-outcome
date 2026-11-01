@@ -1,0 +1,156 @@
+{
+  "artifact_version": "c861bd8f4acd9bbe267bdb58e1168996fdb359c540aaf4030030a632d693c527",
+  "assets": {
+    "meta.json": {
+      "bytes": 2518,
+      "download": "https://github.com/earino/pins-planning-appeal-outcome/releases/download/v2026.10/meta.json",
+      "hf_path": "meta.json",
+      "sha256": "4e7a31048bb77372cbc42bcf3f8a341e2eeeed0afdce920fb678164f2f6c76b2"
+    },
+    "private-holdout.csv": {
+      "bytes": 14976119,
+      "download": "https://github.com/earino/pins-planning-appeal-outcome/releases/download/v2026.10/private-holdout.csv",
+      "hf_path": "data/private-holdout.csv",
+      "sha256": "3f65dc801e0819bd6e828a101065deb7cfc68b764db339a08b2442deddc6fc96"
+    },
+    "public-eval.csv": {
+      "bytes": 7688640,
+      "download": "https://github.com/earino/pins-planning-appeal-outcome/releases/download/v2026.10/public-eval.csv",
+      "hf_path": "data/public-eval.csv",
+      "sha256": "2ab9271f70c74f857f0c1a7b696fa299427754a5fb0167a7ee6ab11480dd6e72"
+    },
+    "public-train.csv": {
+      "bytes": 14799462,
+      "download": "https://github.com/earino/pins-planning-appeal-outcome/releases/download/v2026.10/public-train.csv",
+      "hf_path": "data/public-train.csv",
+      "sha256": "299e5af47610af833bec33e15e8a5d8a242f6edebfd401388714b819593c2f65"
+    },
+    "quality.json": {
+      "bytes": 44632,
+      "download": "https://github.com/earino/pins-planning-appeal-outcome/releases/download/v2026.10/quality.json",
+      "hf_path": "quality.json",
+      "sha256": "9203accc06369f3d2468b8740ac84c293d5e1222907d2daa1d7bb486b437ae33"
+    }
+  },
+  "baseline": {
+    "metrics": {
+      "Evaluation ROC AUC": 0.6108
+    },
+    "scope": "runner-contract baseline plus derived reference intervals; no agent loop, no holdout evaluation. Holdout stays sealed until the design is frozen."
+  },
+  "configs": [],
+  "dataset": "pins-planning-appeal-outcome",
+  "domain": "UK planning appeals / administrative outcomes",
+  "github_repository": "earino/pins-planning-appeal-outcome",
+  "hf_repository": "earino/pins-planning-appeal-outcome",
+  "licenses": {
+    "attribution": "Contains public sector information licensed under the Open Government Licence v3.0. Source: Planning Inspectorate Casework Database (Planning Inspectorate), Casework_Database_-_2610.xlsx and Older_Casework_Data_-_2610.xlsx, 2026-10-22 edition.",
+    "citation": "Planning Inspectorate. Planning Inspectorate Casework Database (bulk extract, 2026-10-22 edition). https://www.gov.uk/government/publications/planning-inspectorate-appeals-database . Licensed under the Open Government Licence v3.0. Derived dataset: UK planning-appeal outcome prediction task (not a Planning Inspectorate product).",
+    "code": "MIT",
+    "compilation_scope": "Our contribution - the s78_core eligibility frame (planning-permission-family casework with a binary Allowed/Dismissed decision), the counted exclusions (non-binary decisions, cross-file composite duplicates, decided-before-validation rows), the derived binary label from the publisher's Decision field, the derived date-gap and calendar features, the site-descriptor and designation flags, the LPA prior-outcome history features computed strictly from decisions earlier than the row's validation instant, the validation-instant temporal partition, and the packaging - is dedicated to the public domain under CC0-1.0. The dedication covers only our contribution: the underlying Planning Inspectorate Casework Database keeps its own designation and remains subject to the Open Government Licence v3.0, whose attribution condition carries through to every copy of the derived data. Nothing here relicenses the source or presents CC0 as the source's terms.",
+    "data_compilation": "CC0-1.0",
+    "source_data": "OGL-UK-3.0"
+  },
+  "limitations": [
+    "Derived research dataset, not an official Planning Inspectorate product; PINS has not reviewed, authorised or endorsed it. The publisher's data is Open Government Licence v3.0 (attribution required); our compilation contribution is dedicated CC0-1.0 and the code is MIT.",
+    "Decided-cases-only population (the publisher excludes in-progress, withdrawn and turned-away cases): the label conditions on reaching a decision, so no claim is made about appeal success before the decision exists.",
+    "Single current-snapshot vintage (2026-10-22 edition, sha256-pinned): between-edition revision means past-era values are as-revised, not as-first-published; no point-in-time reconstruction is claimed and training-label timing is declared unverified.",
+    "The split key is the validation instant, not the decision year: the outcome date cannot ship, and slow cases put some training labels after the eval window's earliest instants - a property of the construction, recorded beside every score.",
+    "LPA-history features carry a declared, probed cross-row outcome exposure (lpa_last_outcome is the previous same-LPA decided case's label when decided in between); honest evaluation requires an isolated-rows protocol that the shipped illustrative runner does NOT enforce. Scores under unrestricted table access overstate honest performance.",
+    "The calendar-identity control collapsed onto the LPA historical rate exactly (eval validation years 2020/2021 have no train-era valid-year support) and year-rate/global-rate scores are constants: both are recorded as degenerate controls, never as independent confirmation.",
+    "Positives cluster by LPA beyond the row grain (appeal outcomes of one planning authority are correlated); per-LPA clustered bootstrap intervals (150 resamples) accompany every reference comparison, and per-validation-year stats are reported.",
+    "The older publisher file (decisions 2016-2020) carries no LPA Decision Date or LPA Application Reference, so neither ships; the train window has no access to them and their eval/holdout copies would have been a train/eval inconsistency.",
+    "Publisher site-descriptor fields left entirely blank in these vintages are not shipped (measured presence below the 100-value threshold, counts recorded in summary.json); Costs Applied for Indicator is excluded as post-instant.",
+    "The enforcement-appeal vocabulary (Notice upheld / varied and upheld / quashed) is out of scope; only Planning Appeal and Householder (HAS) casework types with binary decisions ship.",
+    "The illustrative stock baseline (eval AUC 0.6108) is quoted only beside its references (procedure-type 0.5551, LPA rate 0.5414, persistence 0.5045, majority-class accuracy 0.6987 on this split); the number is never quoted alone.",
+    "The labeled holdout is downloadable by design; keep it and its labels outside every evaluated agent's workspace until a design is frozen."
+  ],
+  "post": {
+    "paragraphs": [
+      "The UK Planning Inspectorate publishes its Casework Database as open data on GOV.UK (Open Government Licence v3.0), as a rolling database republished monthly-to-quarterly since March 2018. The contribution here is not access: it is the sha256-pinned 2026-10-22 source snapshot, the derived binary label (Allowed vs Dismissed), the decided-cases eligibility frame with counted exclusions (2,757 non-binary decisions, 3,110 counted cross-file duplicates, 2 decided-before-valid anomalies), fixed disjoint temporal splits on the validation instant, and a scored, reproducible contract. 139,264 rows: train 54,834 (17,048 positives), eval 28,104 (8,469), and a labeled holdout 56,326 (17,705) that ships but is never scored in development.",
+      "The packaged baseline is illustrative, and the comparisons decide what the number means. The stock runner-contract baseline reaches eval AUC 0.6108 on the 28,104 eval rows; on identical rows the simple references reach: procedure-type historical allow rate 0.5551, LPA historical allow rate 0.5414, persistence (the last same-LPA decided outcome) 0.5045, with majority-class accuracy 0.6987 on this split. The calendar-identity control collapsed exactly onto the LPA rate (eval validation years have no train-era valid-year support) and is recorded as degenerate, never as independent confirmation; year-rate and global-rate constants carry null AUC and are recorded as degenerate too. Per-validation-year eval AUCs are reported (2020: 13,797 rows / 4,126 positives; 2021: 14,307 / 4,343) and reference differences carry an LPA-clustered bootstrap (150 resamples). Under this protocol the stock model exceeds every measured simple reference on the same rows.",
+      "Honest framing, measured rather than asserted. The prediction instant is the validation event (Valid Date, present on 100% of the 186,785 measured decided rows; the measured valid-to-decision lag is 91-365 days for 74% of cases), and every feature is recorded at or before registration. The population is decided-cases-only by publisher design - in-progress, withdrawn and turned-away cases never enter the source - so the label conditions on reaching a decision and no claim is made about appeal success before a decision exists. The publisher serves one revised-in-place current snapshot with no historical vintages, so training-label timing and historical availability are unverified and none is claimed. The split key is the validation instant because the outcome date cannot ship, so slow cases put some training labels after the eval window's earliest instants.",
+      "Cross-row outcome exposure is declared and measured: the LPA-history features embed earlier rows' labels (a later row's lpa_last_outcome is the previous same-LPA decided case's label verbatim when that case was decided in between), so honest evaluation requires isolated rows - one row per solver context. The shipped illustrative runner does not enforce that requirement; it passes the whole eval feature table to the predictor, and unrestricted-access scores overstate honest performance. The holdout is downloadable by design and stays outside every evaluated agent's workspace. Publication is gated on an independent adversarial pre-flip audit of the frozen package, per the standing practice since 2026-10-27."
+    ],
+    "title": "Will a planning appeal be allowed? Validation-time features, decided cases only"
+  },
+  "qualification": {
+    "gate_version": "1.5.0",
+    "result": "PASSED"
+  },
+  "record_sha256": "794d52cf7d350b09d31b489391053f0bc9f98c5c113c0c1cbfa07d01bad18fda",
+  "release_date": "2026-10-31",
+  "release_tag": "v2026.10",
+  "schema_version": 1,
+  "site_revision": 1,
+  "source": {
+    "name": "Planning Inspectorate Casework Database (GOV.UK publication, 2026-10-22 edition) - the two bulk Excel extracts",
+    "url": "https://www.gov.uk/government/publications/planning-inspectorate-appeals-database"
+  },
+  "splits": {
+    "eval": {
+      "positives": 8469,
+      "rows": 28104
+    },
+    "holdout": {
+      "positives": 17705,
+      "rows": 56326
+    },
+    "train": {
+      "positives": 17048,
+      "rows": 54834
+    }
+  },
+  "suitability": {
+    "artifact_version": "c861bd8f4acd9bbe267bdb58e1168996fdb359c540aaf4030030a632d693c527",
+    "corrections": [],
+    "cross_row_audit": {
+      "scope": "Gate 1.5.0's own probe over the full artifact (check contract.cross_row_probe_0, job pins-planning-002): the within-LPA donor join covers 36,643 train / 21,593 eval / 43,747 holdout rows, and on the covered rows the later row's lpa_last_outcome feature is an earlier shipped row's label verbatim exactly when that previous case was already decided before the donor's instant (measured mismatches 15,428 / 8,803 / 18,430 are rows whose previous case was still pending at the donor's instant or where another same-LPA case was decided in between; 12,705 / 6,085 / 12,143 ambiguous same-day keys). The exposure is inherent to any prior-outcome feature and unmitigated at runtime by the shipped contract, which passes the whole eval feature table to the predictor: quality.json declares isolated_rows as a REQUIREMENT for honest evaluation and claims no enforcement. Any evaluation must present one row at a time to the solver; unrestricted-access AUCs are not comparable to isolated-rows AUCs and must not be presented as such.",
+      "status": "recovery_demonstrated"
+    },
+    "dataset": "pins-planning-appeal-outcome",
+    "decision": "retain_restricted",
+    "evaluation_access": "isolated_rows",
+    "historical_availability": "unverified",
+    "limitations": [
+      "Single current-snapshot vintage (the 2026-10-22 edition, sha256-pinned for both source files); the publisher republishes the rolling database monthly-to-quarterly and retains no historical vintages, so no historical operational-availability claim is possible",
+      "Training-label timing and full-row historical availability are unverified; the split key is the validation instant because the outcome date cannot ship, so the task is retrospective research only",
+      "All publisher-sourced columns are current-snapshot vintage: values are as revised in the pinned edition, not as first published at past instants",
+      "The population is the publisher's own decided-cases-only extract (in progress, withdrawn and turned away cases are absent) further restricted to binary decisions - outcome-observability conditioning recorded as a limitation, never resolved by relabelling",
+      "The cross-row exposure over LPA-history features is declared and requires an isolated-rows protocol; the shipped runner does not enforce it",
+      "The headroom finding's scope: one model configuration with no re-tuning, two validation years of eval coverage; the calendar-identity control was degenerate (collapsed onto the LPA rate), so seasonality/identity headroom is not independently established; the model's per-validation-year AUC and Brier were not computed; beating the measured references does not enumerate all simple rules and does not prove a causal signal",
+      "The holdout was never evaluated; no holdout figure exists and its first use must follow a frozen design"
+    ],
+    "release_tag": "v2026.10",
+    "reviewed_on": "2026-10-31",
+    "schema_version": 1,
+    "selection": "outcome_conditioned",
+    "summary": "Retained for retrospective model-development research. Each row is one decided s78_core planning-permission-family appeal whose features are its own registration attributes plus LPA prior-outcome history computed strictly from decisions earlier than the row's validation instant; the prediction instant is the validation event (Valid Date, event_time) and no point-in-time or operational claim is made. The publisher serves a rolling database (pinned here at the 2026-10-22 edition) and no historical vintages, so training-label timing and full-row historical availability are unverified and none is claimed. The evaluation contract requires isolated rows: the LPA-history features embed other rows' labels (lpa_last_outcome is the previous same-LPA decided case's label), a declared and probed cross-row exposure, while the shipped illustrative runner passes the whole eval feature table to the predictor - unrestricted-access scores overstate honest performance and the requirement is a requirement, never an enforcement claim. Measured finding carried beside every figure: the stock runner baseline (eval AUC 0.6108) exceeds every measured simple reference on the identical 28,104 eval rows - procedure-type rate 0.5551 (+0.0558, row CI95 [0.0467, 0.0626], LPA-cluster CI95 [0.0462, 0.0654]), LPA history rate 0.5414 (+0.0694, [0.0622, 0.0766] / [0.0597, 0.0792]), shipped rate feature 0.5422 (+0.0686, [0.0619, 0.0756] / [0.0596, 0.0800]) - every paired interval excluding zero under both the row-level and the LPA-clustered protocol: demonstrated headroom over these references under this protocol, with its scope recorded (one model configuration, no re-tuning; two validation years of eval coverage). Persistence is measured at 0.5045 (92%+ of eval rows' LPAs have train-era history; the -1 sentinel marks the rest). The calendar-identity control collapsed onto the LPA rate exactly (eval years have no train-era valid-year support) and is recorded as a degenerate control, never as independent confirmation.",
+    "supported_uses": [
+      "Retrospective research and method comparison on the pinned 2026-10-22 edition, predicting row-wise from the shipped validation-instant columns under an isolated-rows protocol",
+      "Agent evaluation with the labeled eval split as development/validation data and the holdout kept outside agent development until a design is frozen",
+      "Study of LPA-level and procedure-level prevalence and of which validation-instant attributes carry outcome signal"
+    ],
+    "training_label_timing": "unverified",
+    "unsupported_uses": [
+      "Operational or live validation-instant screening claims: no historical operational-availability evidence exists and none is claimed",
+      "Point-in-time historical reconstruction: the publisher serves a rolling current vintage; a later re-fetch is a different vintage, not what was knowable earlier",
+      "Quoting the model AUC (0.6108) without the reference comparison (procedure-type 0.5551, LPA rate 0.5414, shipped rate 0.5422, persistence 0.5045, with the paired row-level and LPA-clustered intervals) beside it",
+      "Scoring the eval split with the whole feature table and presenting the result as an isolated-rows figure: the LPA-history features make cross-row label recovery measurably possible, so unrestricted-access scores overstate honest performance",
+      "Treating the split as certified decision-time separation: the split key is the validation instant and slow cases put some training labels after the eval window's earliest instants, so label timing is unverified"
+    ],
+    "vintage": "current_snapshot"
+  },
+  "summary": "Research task: at the moment the Planning Inspectorate validates a planning-permission-family appeal (casework type 'Planning Appeal' or 'Householder (HAS)'), predict whether the final decision will be Allowed rather than Dismissed, using only what is known at validation: casework type, procedure, LPA name and ONS code, received date, development type, appeal reason fields, site descriptors and flags, and LPA-level prior-outcome history computed strictly from decisions earlier than the validation instant. One row per decided appeal, 139,264 rows across fixed temporal splits on the validation instant (train 54,834 validated pre-2020, eval 28,104 validated 2020-2021, holdout 56,326 validated 2022 onward). A retrospective, current-snapshot construction over the sha256-pinned 2026-10-22 edition of the publisher's rolling database - not an operational screening tool and not a point-in-time reconstruction.",
+  "task_type": "binary-classification",
+  "title": "UK planning appeal outcome",
+  "urls": {
+    "catalog": "https://earino.github.io/dataset-factory-site/",
+    "github": "https://github.com/earino/pins-planning-appeal-outcome",
+    "github_release": "https://github.com/earino/pins-planning-appeal-outcome/releases/tag/v2026.10",
+    "huggingface": "https://huggingface.co/datasets/earino/pins-planning-appeal-outcome",
+    "huggingface_version": "https://huggingface.co/datasets/earino/pins-planning-appeal-outcome/tree/v2026.10",
+    "version": "https://earino.github.io/pins-planning-appeal-outcome/versions/v2026.10/",
+    "website": "https://earino.github.io/pins-planning-appeal-outcome/"
+  }
+}
